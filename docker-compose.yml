@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  clientmanagementapi:
+    image: 
+        ${DOCKER_REGISTRY-}clientmanagementapi
+    build:
+      context: .
+      dockerfile: ClientManagementApi/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=client_management;Username=postgres;Password=postgres"
+  db:
+    container_name: postgres_client_management_api
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: client_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
